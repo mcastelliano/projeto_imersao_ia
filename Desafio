@@ -1,0 +1,183 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMskMUQSsRnabEXR84lDFlC",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/mcastelliano/projeto_imersao_ia/blob/main/Desafio\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pip install -q -U google-generativeai"
+      ],
+      "metadata": {
+        "id": "TU-8Dy8lhTGW"
+      },
+      "execution_count": 26,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import google.generativeai as genai\n",
+        "\n",
+        "# Configurar Genai com a chave de API\n",
+        "from google.colab import userdata\n",
+        "GENAI_API_KEY = userdata.get(\"SECRET_KEY\")\n",
+        "genai.configure(api_key=GENAI_API_KEY)\n",
+        "\n",
+        "# Set modelo\n",
+        "generation_config = {\n",
+        "  \"temperature\": 1,\n",
+        "  \"top_p\": 0.95,\n",
+        "  \"top_k\": 0,\n",
+        "  \"max_output_tokens\": 8192,\n",
+        "}\n",
+        "\n",
+        "# Define modelo\n",
+        "model = genai.GenerativeModel('gemini-pro')\n",
+        "\n",
+        "# Inicia o chatbot\n",
+        "chat = model.start_chat(history=[])\n",
+        "\n",
+        "prompt = \"yes\"\n",
+        "\n",
+        "# Loop do chatbot\n",
+        "while prompt != \"no\":\n",
+        "    # Cabeçalho\n",
+        "    cabecalho_html = '<h1 style=\"font-size: 20px;\">Olá! Vamos planejar suas atividades ao ar livre?</h1>'\n",
+        "    display(HTML(cabecalho_html))\n",
+        "    print(\"\\n\")\n",
+        "\n",
+        "    # Dado de input\n",
+        "    nome = input(\"NOME: \")\n",
+        "    idade = input(\"IDADE: \")\n",
+        "    atividade_fisica = input(\"ATIVIDADE FÍSICA: \")\n",
+        "    cidade = input(\"CIDADE: \")\n",
+        "    print(\"\\n\")\n",
+        "    resposta = input(\"Confirma dados(S/N): \")\n",
+        "\n",
+        "    if resposta == 'N' or resposta == 'n':\n",
+        "       continue\n",
+        "\n",
+        "    print(\"\\n\" * 2)\n",
+        "\n",
+        "    # Exec generate_content\n",
+        "    mensagem = f\"Sugestões de atividades ao ar livre na cidade {cidade}, levando em consideração a idade {idade} e atividade física {atividade_fisica}. Informando os melhores os nomes dos lugares para realizar essas atividades\"\n",
+        "    response = model.generate_content(mensagem)\n",
+        "    print(response.text)\n",
+        "\n",
+        "    prompt = input(\"\\nContinua chatbot (S/N): \")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "id": "B2_zeXG8lzo0",
+        "outputId": "d2fd5139-b33e-4218-ba92-3a9712eac4d3"
+      },
+      "execution_count": 51,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "<h1 style=\"font-size: 20px;\">Olá! Vamos planejar suas atividades ao ar livre?</h1>"
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "\n",
+            "NOME: Marcelo\n",
+            "IDADE: 60\n",
+            "ATIVIDADE FÍSICA: sedentario\n",
+            "CIDADE: Rio de Janeiro\n",
+            "\n",
+            "\n",
+            "Confirma dados(S/N): S\n",
+            "\n",
+            "\n",
+            "\n",
+            "**Atividades ao Ar Livre Adequadas para Idosos Sedentários no Rio de Janeiro:**\n",
+            "\n",
+            "**1. Caminhada Leve:**\n",
+            "\n",
+            "* **Parque Lage:** Caminhos planos e sombreados com vistas deslumbrantes do Jardim Botânico.\n",
+            "* **Parque do Flamengo:** Trilha litorânea pavimentada adequada para caminhadas de ritmo lento.\n",
+            "\n",
+            "**2. Tai Chi ou Yoga:**\n",
+            "\n",
+            "* **Parque da Cidade:** Aulas gratuitas de tai chi e yoga são oferecidas periodicamente nas áreas verdes.\n",
+            "* **Lagoa Rodrigo de Freitas:** Estúdios de ioga ao ar livre oferecem aulas adequadas para iniciantes.\n",
+            "\n",
+            "**3. Observação de Pássaros:**\n",
+            "\n",
+            "* **Parque Garota de Ipanema:** Este pequeno parque à beira-mar oferece um santuário para várias espécies de pássaros.\n",
+            "* **Jardim Botânico:** Abriga uma grande variedade de pássaros, incluindo tucanos e papagaios.\n",
+            "\n",
+            "**4. Piquenique:**\n",
+            "\n",
+            "* **Parque da Tijuca:** Grandes áreas gramadas perfeitas para piqueniques cercados por natureza exuberante.\n",
+            "* **Parque Lage:** Jardins deslumbrantes com mesas de piquenique e áreas sombreadas.\n",
+            "\n",
+            "**5. Passeio de Bondinho:**\n",
+            "\n",
+            "* **Bondinho do Pão de Açúcar:** Suba até o Morro da Urca e aprecie as vistas panorâmicas da cidade sem esforço físico.\n",
+            "* **Bondinho de Santa Teresa:** Explore o bairro boêmio de Santa Teresa com um passeio de bonde descontraído.\n",
+            "\n",
+            "**Dicas adicionais:**\n",
+            "\n",
+            "* Escolha horários mais frescos do dia para atividades ao ar livre, como manhã cedo ou final da tarde.\n",
+            "* Leve água e protetor solar suficientes.\n",
+            "* Vista roupas e calçados confortáveis e adequados.\n",
+            "* Comece gradualmente e aumente o tempo e a intensidade das atividades progressivamente.\n",
+            "* Ouça seu corpo e descanse quando necessário.\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "KeyboardInterrupt",
+          "evalue": "Interrupted by user",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-51-7b25909cae48>\u001b[0m in \u001b[0;36m<cell line: 25>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     47\u001b[0m     \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresponse\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtext\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     48\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 49\u001b[0;31m     \u001b[0mprompt\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0minput\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\nContinua chatbot (S/N): \"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/ipykernel/kernelbase.py\u001b[0m in \u001b[0;36mraw_input\u001b[0;34m(self, prompt)\u001b[0m\n\u001b[1;32m    849\u001b[0m                 \u001b[0;34m\"raw_input was called, but this frontend does not support input requests.\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    850\u001b[0m             )\n\u001b[0;32m--> 851\u001b[0;31m         return self._input_request(str(prompt),\n\u001b[0m\u001b[1;32m    852\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_parent_ident\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    853\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_parent_header\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/ipykernel/kernelbase.py\u001b[0m in \u001b[0;36m_input_request\u001b[0;34m(self, prompt, ident, parent, password)\u001b[0m\n\u001b[1;32m    893\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyboardInterrupt\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    894\u001b[0m                 \u001b[0;31m# re-raise KeyboardInterrupt, to truncate traceback\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 895\u001b[0;31m                 \u001b[0;32mraise\u001b[0m \u001b[0mKeyboardInterrupt\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Interrupted by user\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    896\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mException\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    897\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlog\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwarning\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Invalid Message:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mexc_info\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mKeyboardInterrupt\u001b[0m: Interrupted by user"
+          ]
+        }
+      ]
+    }
+  ]
+}
